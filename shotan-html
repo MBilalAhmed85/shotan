@@ -1,0 +1,55 @@
+import random
+
+def gun_shooting_simulator():
+    print("Welcome to the Gun Shooting Simulator!")
+    print("Aim your shots by entering an angle (0-90 degrees) and distance (1-100 meters).")
+    print("Wind and target size affect accuracy. Good luck!\n")
+    
+    shots = 10
+    score = 0
+    wind_speed = random.randint(-10, 10)  # Random wind factor
+    
+    for shot in range(shots):
+        print(f"Shot {shot + 1}/{shots}. Wind speed: {wind_speed} km/h.")
+        
+        # Generate random target
+        target_distance = random.randint(10, 100)
+        target_size = random.choice(["small", "medium", "large"])
+        difficulty = {"small": 5, "medium": 10, "large": 15}[target_size]
+        
+        print(f"Target at {target_distance} meters, size: {target_size}.")
+        
+        # Player input
+        try:
+            aim_angle = float(input("Enter aim angle (0-90): "))
+            aim_distance = float(input("Enter aim distance (1-100): "))
+        except ValueError:
+            print("Invalid input. Shot missed!\n")
+            continue
+        
+        # Calculate hit chance
+        angle_error = abs(aim_angle - 45)  # Optimal angle is 45 degrees
+        distance_error = abs(aim_distance - target_distance)
+        wind_effect = abs(wind_speed) * 0.5
+        total_error = angle_error + distance_error + wind_effect
+        
+        hit_chance = max(0, 100 - total_error - difficulty)
+        hit = random.randint(0, 100) < hit_chance
+        
+        if hit:
+            points = {"small": 10, "medium": 5, "large": 2}[target_size]
+            score += points
+            print(f"Hit! +{points} points. Score: {score}\n")
+        else:
+            print("Missed!\n")
+    
+    print(f"Game over! Final score: {score} points.")
+    if score >= 50:
+        print("Great shooting!")
+    elif score >= 20:
+        print("Not bad.")
+    else:
+        print("Better luck next time!")
+
+# Run the simulator
+gun_shooting_simulator()
